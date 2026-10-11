@@ -1,0 +1,20 @@
+{
+  "default_provider": "gemini",
+  "gemini_api_key": "",
+  "model": "auto",
+  "orchestration": {
+    "enable_local_fallback": true,
+    "system_commands": true
+  },
+  "services": {
+    "ollama": {
+      "enabled": false,
+      "base_url": "http://localhost:11434",
+      "model": "llama3"
+    },
+    "comfyui": {
+      "enabled": false,
+      "base_url": "http://localhost:8188"
+    }
+  }
+}

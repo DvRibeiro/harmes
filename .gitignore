@@ -218,3 +218,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Harmes local configs & credentials
+config.json
+.env
+.env.*
+!config.example.json
+venv/
+.venv/
