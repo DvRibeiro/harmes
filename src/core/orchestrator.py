@@ -53,10 +53,11 @@ class AIOrchestrator:
         return has_subject and has_action
 
     def _extract_task(self, prompt: str) -> str:
-        """Extrai a instrução central de um comando com prefixos de delegação."""
+        """Extrai a instrução central de um comando com prefixos ou sufixos de delegação."""
         cleaned = prompt
-        # Remove saudações e comandos comuns como "Hermes, peça para o AntiGravity..."
+        # Remove saudações no início ("Hermes, ...")
         cleaned = re.sub(r"^(\s*hermes\s*[,:]?\s*)?", "", cleaned, flags=re.IGNORECASE)
+        # Remove prefixos de delegação
         cleaned = re.sub(
             r"^(pe[çc]a\s+(para|pro|ao)\s+(o\s+)?antigravity\s+(para\s+|de\s+|que\s+)?)",
             "",
@@ -64,6 +65,13 @@ class AIOrchestrator:
             flags=re.IGNORECASE
         )
         cleaned = re.sub(r"^(antigravity\s*[,:]?\s*)", "", cleaned, flags=re.IGNORECASE)
+        # Remove sufixos como ". Se necessário, peça para o Antigravity", "peça ao antigravity", etc.
+        cleaned = re.sub(
+            r"([.,;]?\s*(se\s+necess[aá]rio\s*[,:]?\s*)?pe[çc]a\s+(para|pro|ao)\s+(o\s+)?antigravity.*)$",
+            "",
+            cleaned,
+            flags=re.IGNORECASE
+        )
         return cleaned.strip() or prompt.strip()
 
     def _handle_antigravity_delegation(self, task_prompt: str, original_prompt: str) -> str:
@@ -92,8 +100,8 @@ class AIOrchestrator:
             full_instruction = f"{target_task}\n\n" + "\n".join(context_notes)
 
         # Escolhe workspace: prioriza z:\homelab se existir para infraestrutura
-        homelab_ws = Path("z:/homelab")
-        workspace_dir = str(homelab_ws.resolve()) if homelab_ws.exists() else None
+        homelab_ws = Path("Z:/homelab")
+        workspace_dir = "Z:/homelab" if homelab_ws.exists() else None
 
         # Executa no AntiGravity via Python SDK
         result = self.antigravity.run_task(full_instruction, workspace=workspace_dir)
@@ -106,7 +114,7 @@ class AIOrchestrator:
         # Gravar Relatório Completo em disco
         report_file = self.task_logger.log_task(
             user_prompt=original_prompt,
-            task_name=target_task[:50],
+            task_name=target_task,
             raw_output=raw_output,
             summary=summary,
             workspace=result.get("workspace", "Homelab"),
@@ -139,9 +147,10 @@ class AIOrchestrator:
             try:
                 provider = GeminiProvider(api_key=api_key, model=model)
                 synth_prompt = (
-                    "Você é o HERMES, assistente místico e eficiente. "
-                    "Resuma o seguinte relatório do AntiGravity em exatamente 2 ou 3 frases objetivas "
-                    "e elegantes em português para o usuário. Foque na causa raiz ou resultado principal:\n\n"
+                    "Você é o HERMES, assistente técnico e prestativo. "
+                    "Apresente a resposta técnica do AntiGravity de forma direta e concisa (2 a 3 frases) em português. "
+                    "Destaque com precisão portas, arquivos e status encontrados. "
+                    "IMPORTANTE: Não mencione Docker nem suposições teóricas, use apenas os dados reais do relatório:\n\n"
                     f"{raw_output[:2500]}"
                 )
                 return provider.generate(synth_prompt)

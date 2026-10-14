@@ -22,13 +22,13 @@ class AntiGravityProvider:
         self.model = model or "gemini-3.5-flash-lite"
         self.api_key = api_key
         # Se z:\homelab existir, adota como workspace padrão de infraestrutura
-        homelab_path = Path("z:/homelab")
+        homelab_path = Path("Z:/homelab")
         if default_workspace:
-            self.default_workspace = str(Path(default_workspace).resolve())
+            self.default_workspace = str(Path(default_workspace).as_posix())
         elif homelab_path.exists():
-            self.default_workspace = str(homelab_path.resolve())
+            self.default_workspace = "Z:/homelab"
         else:
-            self.default_workspace = str(Path.cwd().resolve())
+            self.default_workspace = str(Path.cwd().as_posix())
 
     def is_available(self) -> bool:
         """Indica se a biblioteca do SDK está instalada no ambiente."""
@@ -44,13 +44,22 @@ class AntiGravityProvider:
             api_key=self.api_key.strip() or None,
             model=self.model,
             workspaces=workspaces,
-            system_instructions=(
-                "Você é o AntiGravity, o agente técnico de infraestrutura, código e automação "
-                "que atua em conjunto com o assistente HERMES. "
-                "Execute as tarefas com alto rigor técnico, analisando arquivos, configurações, logs "
-                "e status de serviços. Forneça diagnósticos objetivos, causa raiz e códigos ou comandos "
-                "necessários para correção. Responda em português."
-            ),
+            system_instructions="""Voce e o AntiGravity, o agente tecnico especialista em codigo e infraestrutura do ecossistema Homelab, atuando diretamente em conjunto com o assistente orquestrador HERMES.
+
+CONTEXTO DO HOMELAB:
+- Workspace: Z:/homelab (montagem do no Alpine Linux 192.168.15.8) e nos Windows 10.
+- A INFRAESTRUTURA NAO UTILIZA DOCKER. Todos os servicos rodam nativamente em Python/Alpine Linux e Windows.
+- Servicos proprios existentes no repositorio:
+  * services/webcam-streamer/webcam_streamer.py -> Servidor de streaming da webcam PC024 e detector de movimento na PORTA 8080.
+  * services/monitor/monitor.py -> Homelab Monitor e dashboard web na PORTA 5050.
+  * services/monitor/config.json -> Configuracao e portas de todos os servicos monitorados.
+  * shared/homelab_notify/ -> Biblioteca compartilhada de alertas para o Discord.
+  * hosts/alpine/ e hosts/windows/ -> Scripts de inicializacao e automacao.
+
+DIRETRIZES DE EXECUCAO:
+1. Sempre analise o codigo e arquivos do workspace antes de dar qualquer resposta tecnica.
+2. NUNCA mencione ou sugira Docker, containers ou ferramentas inexistentes (como Frigate, MotionEye, Portainer).
+3. Seja direto, preciso e cite os arquivos e portas exatas do projeto.""",
             capabilities=CapabilitiesConfig(),
         )
 
