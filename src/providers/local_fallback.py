@@ -44,9 +44,9 @@ class LocalFallbackProvider(BaseProvider):
         q = prompt.lower().strip()
 
         # Saudação e identidade
-        if any(w in q for w in ["olá", "ola", "oi", "quem é você", "quem e voce", "harmes", "hermes"]):
+        if any(w in q for w in ["olá", "ola", "oi", "quem é você", "quem e voce", "hermes", "hermes"]):
             return (
-                "Eu sou o <b>HARMES</b>, seu orquestrador de IA e serviços locais.<br><br>"
+                "Eu sou o <b>HERMES</b>, seu orquestrador de IA e serviços locais.<br><br>"
                 "Estou pronto para canalizar suas ordens para serviços de inteligência artificial "
                 "e automações na sua máquina."
             )

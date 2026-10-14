@@ -1,4 +1,4 @@
-"""Componentes de interface de usuário do HARMES."""
+"""Componentes de interface de usuário do HERMES."""
 
 from .balloon import SpeechBalloon
 from .companion import CreatureCompanion

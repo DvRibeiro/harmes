@@ -1,4 +1,4 @@
-"""Núcleo de orquestração do Harmes."""
+"""Núcleo de orquestração do Hermes."""
 
 from .orchestrator import AIOrchestrator
 from .task_logger import TaskLogger

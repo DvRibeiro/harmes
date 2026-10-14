@@ -1,4 +1,4 @@
-"""Balão de diálogo flutuante do Harmes."""
+"""Balão de diálogo flutuante do Hermes."""
 
 import os
 import sys
@@ -33,7 +33,7 @@ class SpeechBalloon(QWidget):
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 4)
 
-        self.title_lbl = QLabel("HARMES")
+        self.title_lbl = QLabel("HERMES")
         self.title_lbl.setStyleSheet(
             "color: #a855f7; font-size: 11px; font-weight: 700; "
             "font-family: 'Segoe UI', sans-serif; letter-spacing: 1.5px;"

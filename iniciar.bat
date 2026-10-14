@@ -1,12 +1,12 @@
 @echo off
 setlocal
-title HARMES - AI Orchestrator Companion
+title HERMES - AI Orchestrator Companion
 cd /d "%~dp0"
 
 :: 1. Verificar se a venv existe. Se nao existir, criar e instalar dependencias.
 if not exist "venv\Scripts\activate.bat" (
     echo ========================================================
-    echo  [HARMES] Ambiente virtual nao encontrado.
+    echo  [HERMES] Ambiente virtual nao encontrado.
     echo  Criando ambiente virtual em .\venv ...
     echo ========================================================
     python -m venv venv
@@ -20,7 +20,7 @@ if not exist "venv\Scripts\activate.bat" (
 
     echo.
     echo ========================================================
-    echo  [HARMES] Ativando venv e instalando requirements.txt ...
+    echo  [HERMES] Ativando venv e instalando requirements.txt ...
     echo ========================================================
     call venv\Scripts\activate.bat
     python -m pip install --upgrade pip
@@ -32,7 +32,7 @@ if not exist "venv\Scripts\activate.bat" (
         exit /b 1
     )
     echo.
-    echo [HARMES] Ambiente virtual configurado com sucesso!
+    echo [HERMES] Ambiente virtual configurado com sucesso!
     echo ========================================================
     echo.
 ) else (
@@ -41,11 +41,11 @@ if not exist "venv\Scripts\activate.bat" (
 )
 
 :: 3. Executar o assistente
-echo [HARMES] Iniciando o assistente...
+echo [HERMES] Iniciando o assistente...
 python main.py
 
 if errorlevel 1 (
     echo.
-    echo [HARMES] O assistente foi encerrado com erro.
+    echo [HERMES] O assistente foi encerrado com erro.
     pause
 )

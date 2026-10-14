@@ -1,4 +1,4 @@
-"""Inicialização da aplicação Harmes."""
+"""Inicialização da aplicação Hermes."""
 
 import sys
 from PyQt6.QtWidgets import QApplication
@@ -6,7 +6,7 @@ from .ui.companion import CreatureCompanion
 
 
 def main():
-    """Ponto de entrada principal da aplicação Harmes."""
+    """Ponto de entrada principal da aplicação Hermes."""
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(True)
 

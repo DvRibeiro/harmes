@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Ponto de entrada raiz para execução do HARMES."""
+"""Ponto de entrada raiz para execução do HERMES."""
 
 import sys
 from pathlib import Path

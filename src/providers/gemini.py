@@ -11,7 +11,7 @@ from .base import BaseProvider
 
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
 SYSTEM_INSTRUCTION = (
-    "Você é o HARMES, uma entidade inteligente das sombras e mensageiro orquestrador "
+    "Você é o HERMES, uma entidade inteligente das sombras e mensageiro orquestrador "
     "no desktop do usuário. Você conecta e coordena IAs e serviços locais da máquina. "
     "Responda em português com clareza, inteligência e tom prestativo, com um toque sutil de mistério. "
     "Formate a resposta de forma limpa."
@@ -105,21 +105,29 @@ def _generate(query: str, api_key: str, model: str) -> str:
 
 def generate_reply(query: str, api_key: str, model: str = "auto") -> str:
     model = (model or "auto").strip().removeprefix("models/")
+    last_error = None
     if model and model.lower() != "auto":
         try:
             return _generate(query, api_key, model)
         except GeminiError as exc:
-            if exc.status != 404:
+            if exc.status not in (404, 500, 502, 503, 504):
                 raise
-    # Descubra substitutos para modelos retirados, inclusive em config.json antigos.
+            last_error = exc
+
+    # Descubra substitutos para modelos retirados ou temporariamente indisponíveis (503/500/404)
     for available in list_text_models(api_key):
         if available == model:
             continue
         try:
             return _generate(query, api_key, available)
         except GeminiError as exc:
-            if exc.status != 404:
-                raise
+            if exc.status in (404, 500, 502, 503, 504):
+                last_error = exc
+                continue
+            raise
+
+    if last_error:
+        raise last_error
     raise GeminiError("Nenhum modelo Gemini de texto compatível com generateContent está disponível para esta chave.")
 
 

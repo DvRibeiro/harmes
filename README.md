@@ -1,12 +1,12 @@
-# 👁️⚡ HARMES — AI Desktop Companion & Local Services Orchestrator
+# 👁️⚡ HERMES — AI Desktop Companion & Local Services Orchestrator
 
-> **HARMES** (inspirado no deus mensageiro *Hermes*) é um assistente de desktop temático com estética sombria e transparente, projetado para atuar como o **orquestrador central de Inteligências Artificiais e serviços locais** na sua máquina.
+> **HERMES** (inspirado no deus mensageiro *Hermes*) é um assistente de desktop temático com estética sombria e transparente, projetado para atuar como o **orquestrador central de Inteligências Artificiais e serviços locais** na sua máquina.
 
 ---
 
 ## 🌌 Visão do Projeto
 
-Diferente de simples chatbots web ou janelas convencionais, o **HARMES** vive na sua área de trabalho:
+Diferente de simples chatbots web ou janelas convencionais, o **HERMES** vive na sua área de trabalho:
 - **Presença Flutuante & Imersiva**: Uma criatura animada translúcida que habita seu desktop, pronta para receber comandos sem abrir navegadores ou janelas pesadas.
 - **Orquestrador Multi-IA**: Uma arquitetura modular projetada para canalizar solicitações para múltiplas IAs na nuvem (Google Gemini) e IAs/serviços locais (Ollama, LM Studio, ComfyUI, automações de sistema e homelab).
 - **Leve & Independente**: Construído sobre **PyQt6** com cliente REST puro (sem SDKs pesados), consumindo o mínimo de memória e CPU.
@@ -18,7 +18,7 @@ Diferente de simples chatbots web ou janelas convencionais, o **HARMES** vive na
 O projeto adota uma arquitetura modular desacoplada:
 
 ```text
-harmes/
+hermes/
 ├── assets/                     # Sprites e recursos visuais do companion
 │   ├── frame_0.png .. frame_7.png
 │   └── spritesheet_transparent.png
@@ -90,10 +90,10 @@ harmes/
    - Suporte nativo ao **Google Gemini** com descoberta dinâmica de modelos (`auto`), priorizando versões Flash estáveis e tratando atualizações/remoções de modelos (HTTP 404).
    - Modo **Local Fallback**: se nenhuma chave for inserida ou em falhas de rede, responde a utilitários locais, relógio, data e cálculos matemáticos com parser AST seguro.
 6. **Integração com Google AntiGravity via Python SDK**:
-   - O HARMES atua como maestro: ao receber pedidos técnicos (ex: *"Hermes, peça para o AntiGravity verificar o servidor de minecraft"*), delega autonomamente a tarefa para o agente **AntiGravity** com contexto e workspace direcionados.
+   - O HERMES atua como maestro: ao receber pedidos técnicos (ex: *"Hermes, peça para o AntiGravity verificar o servidor de minecraft"*), delega autonomamente a tarefa para o agente **AntiGravity** com contexto e workspace direcionados.
    - Diagnósticos preliminares de rede e infraestrutura do Homelab (`tools.py`) via socket TCP e latência.
 7. **Sistema de Auditoria & Relatórios Completos (`Task Reports`)**:
-   - Para não sobrecarregar o balão com códigos e saídas extensas de terminal, o HARMES apresenta uma síntese executiva de 2 frases e salva a íntegra da análise em `reports/tasks/*.md`.
+   - Para não sobrecarregar o balão com códigos e saídas extensas de terminal, o HERMES apresenta uma síntese executiva de 2 frases e salva a íntegra da análise em `reports/tasks/*.md`.
    - Botão de relatório e links clicáveis diretamente no balão abrem o arquivo `.md` no editor do sistema (ex: VS Code) em 1 clique.
 
 ---
@@ -112,16 +112,16 @@ python -m pip install -r requirements.txt
 
 ### 2. Inicialização
 
-Você pode iniciar o HARMES de três maneiras:
+Você pode iniciar o HERMES de três maneiras:
 
 - **Via Script em Lote (com console)**:
-  Dê dois cliques em [`iniciar.bat`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/harmes/iniciar.bat) ou execute no terminal:
+  Dê dois cliques em [`iniciar.bat`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/hermes/iniciar.bat) ou execute no terminal:
   ```cmd
   iniciar.bat
   ```
 
 - **Silencioso (Sem janela preta de comando)**:
-  Dê dois cliques em [`iniciar_sem_janela.vbs`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/harmes/iniciar_sem_janela.vbs).
+  Dê dois cliques em [`iniciar_sem_janela.vbs`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/hermes/iniciar_sem_janela.vbs).
 
 - **Via Python diretamente**:
   ```bash
@@ -137,7 +137,7 @@ Você pode iniciar o HARMES de três maneiras:
 3. Mantenha o modelo como `auto` (recomendado) ou especifique um modelo de sua preferência.
 4. Clique em **Salvar Configurações**.
 
-> 💡 **Nota de Segurança**: As chaves ficam salvas localmente no arquivo [`config.json`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/harmes/config.json), que está incluído no `.gitignore` e **nunca** deve ser versionado publicamente. Você também pode definir a variável de ambiente `GEMINI_API_KEY`.
+> 💡 **Nota de Segurança**: As chaves ficam salvas localmente no arquivo [`config.json`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/hermes/config.json), que está incluído no `.gitignore` e **nunca** deve ser versionado publicamente. Você também pode definir a variável de ambiente `GEMINI_API_KEY`.
 
 ---
 
@@ -154,8 +154,8 @@ Para plugar um novo serviço local (como **Ollama**, **ComfyUI** ou automação 
            # Comunicação com a API local (ex: localhost:11434)
            return "Resposta do serviço local"
    ```
-2. Registre o provedor em [`src/core/orchestrator.py`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/harmes/src/core/orchestrator.py).
-3. Atualize [`config.example.json`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/harmes/config.example.json) com as configurações do serviço.
+2. Registre o provedor em [`src/core/orchestrator.py`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/hermes/src/core/orchestrator.py).
+3. Atualize [`config.example.json`](file:///E:/SERVIDOR/GERENCIAMENTO/HERMES/hermes/config.example.json) com as configurações do serviço.
 
 ---
 

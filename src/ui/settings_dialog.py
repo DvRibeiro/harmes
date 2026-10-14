@@ -1,4 +1,4 @@
-"""Diálogo de configurações do HARMES."""
+"""Diálogo de configurações do HERMES."""
 
 from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox
@@ -12,7 +12,7 @@ class SettingsDialog(QDialog):
     def __init__(self, config: dict, parent=None):
         super().__init__(parent)
         self.config = config
-        self.setWindowTitle("HARMES - Configurações de IA e Serviços")
+        self.setWindowTitle("HERMES - Configurações de IA e Serviços")
         self.setFixedSize(440, 380)
         self.setStyleSheet("""
             QDialog {
@@ -77,7 +77,7 @@ class SettingsDialog(QDialog):
 
         hint = QLabel(
             "Use 'auto' para autodetectar os modelos mais rápidos e recentes. "
-            "Se não preencher a chave, o Harmes usará respostas e utilitários locais."
+            "Se não preencher a chave, o Hermes usará respostas e utilitários locais."
         )
         hint.setWordWrap(True)
         hint.setStyleSheet("color: #9ca3af; font-size: 11px;")

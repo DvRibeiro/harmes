@@ -1,4 +1,4 @@
-"""Interface base para provedores de IA e serviços do Harmes."""
+"""Interface base para provedores de IA e serviços do Hermes."""
 
 from abc import ABC, abstractmethod
 

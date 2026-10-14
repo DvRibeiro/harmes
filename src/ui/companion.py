@@ -1,4 +1,4 @@
-"""Componente visual principal do assistente HARMES (Companion flutuante)."""
+"""Componente visual principal do assistente HERMES (Companion flutuante)."""
 
 import math
 import threading
@@ -54,7 +54,7 @@ class CreatureCompanion(QWidget):
             if fpath.exists():
                 self.frames.append(QPixmap(str(fpath)))
             else:
-                print(f"[Harmes] Aviso: frame não encontrado: {fpath}")
+                print(f"[Hermes] Aviso: frame não encontrado: {fpath}")
 
         # Estados: idle, running_away, processing, running_back
         self.state = "idle"
@@ -94,7 +94,7 @@ class CreatureCompanion(QWidget):
             self.tray.setIcon(QIcon(self.frames[7]))
 
         tray_menu = QMenu()
-        show_action = QAction("Mostrar HARMES", self)
+        show_action = QAction("Mostrar HERMES", self)
         show_action.triggered.connect(self.show_and_raise)
         tray_menu.addAction(show_action)
 
@@ -205,7 +205,7 @@ class CreatureCompanion(QWidget):
         chat_layout.setContentsMargins(18, 6, 8, 6)
 
         self.input_field = QLineEdit(self.chat_container)
-        self.input_field.setPlaceholderText("Comande o HARMES...")
+        self.input_field.setPlaceholderText("Comande o HERMES...")
         self.input_field.setStyleSheet("""
             QLineEdit {
                 background: transparent;

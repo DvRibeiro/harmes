@@ -1,4 +1,4 @@
-"""Orquestrador Central do HARMES.
+"""Orquestrador Central do HERMES.
 
 Coordena o roteamento inteligente de solicitações entre provedores de IA,
 delegação para o Google AntiGravity com relatórios em disco e serviços do Homelab.
@@ -81,7 +81,7 @@ class AIOrchestrator:
 
             status_desc = "ONLINE" if mc_info["online"] else f"OFFLINE ({mc_info.get('error', 'Sem resposta')})"
             context_notes.append(
-                f"[Diagnóstico Preliminar de Rede HARMES]:\n"
+                f"[Diagnóstico Preliminar de Rede HERMES]:\n"
                 f"Tentativa de conexão TCP em {mc_info['host']}:{mc_info['port']} -> Status: {status_desc}."
             )
 
@@ -98,7 +98,7 @@ class AIOrchestrator:
         raw_output = result.get("output", "")
         success = result.get("success", False)
 
-        # Gerar Síntese Executiva no tom do HARMES
+        # Gerar Síntese Executiva no tom do HERMES
         summary = self._generate_executive_summary(target_task, raw_output)
 
         # Gravar Relatório Completo em disco
@@ -137,7 +137,7 @@ class AIOrchestrator:
             try:
                 provider = GeminiProvider(api_key=api_key, model=model)
                 synth_prompt = (
-                    "Você é o HARMES, assistente místico e eficiente. "
+                    "Você é o HERMES, assistente místico e eficiente. "
                     "Resuma o seguinte relatório do AntiGravity em exatamente 2 ou 3 frases objetivas "
                     "e elegantes em português para o usuário. Foque na causa raiz ou resultado principal:\n\n"
                     f"{raw_output[:2500]}"

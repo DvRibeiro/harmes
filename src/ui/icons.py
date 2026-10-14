@@ -1,4 +1,4 @@
-"""Gerador de ícones vetoriais com QPainter para a interface do Harmes."""
+"""Gerador de ícones vetoriais com QPainter para a interface do Hermes."""
 
 import math
 from PyQt6.QtCore import Qt, QRectF

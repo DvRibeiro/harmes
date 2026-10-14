@@ -1,4 +1,4 @@
-"""Gerenciamento de configurações e caminhos do Harmes."""
+"""Gerenciamento de configurações e caminhos do Hermes."""
 
 import json
 import os
@@ -55,7 +55,7 @@ def load_config() -> dict:
                 if isinstance(saved, dict):
                     cfg.update(saved)
         except Exception as e:
-            print(f"[Harmes Config] Aviso ao ler config.json: {e}")
+            print(f"[Hermes Config] Aviso ao ler config.json: {e}")
     elif EXAMPLE_CONFIG_FILE.exists():
         try:
             with open(EXAMPLE_CONFIG_FILE, "r", encoding="utf-8") as f:
@@ -75,5 +75,5 @@ def save_config(cfg: dict) -> bool:
             json.dump(cfg, f, indent=2, ensure_ascii=False)
         return True
     except Exception as e:
-        print(f"[Harmes Config] Erro ao salvar config.json: {e}")
+        print(f"[Hermes Config] Erro ao salvar config.json: {e}")
         return False
