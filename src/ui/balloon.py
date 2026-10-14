@@ -1,7 +1,13 @@
 """Balão de diálogo flutuante do Harmes."""
 
-from PyQt6.QtCore import Qt, QRect, QSize, pyqtSignal, QTimer
-from PyQt6.QtGui import QPainter, QColor, QPen, QBrush, QPainterPath, QLinearGradient
+import os
+import sys
+import subprocess
+from pathlib import Path
+from PyQt6.QtCore import Qt, QRect, QSize, pyqtSignal, QTimer, QUrl
+from PyQt6.QtGui import (
+    QPainter, QColor, QPen, QBrush, QPainterPath, QLinearGradient, QDesktopServices
+)
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
     QTextBrowser, QApplication
@@ -18,6 +24,7 @@ class SpeechBalloon(QWidget):
         super().__init__(parent)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.current_report_path = None
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(18, 14, 18, 22)
@@ -33,6 +40,28 @@ class SpeechBalloon(QWidget):
         )
         header_layout.addWidget(self.title_lbl)
         header_layout.addStretch()
+
+        # Botão para abrir o relatório de missão gerado pelo AntiGravity
+        self.btn_report = QPushButton()
+        self.btn_report.setIcon(create_vector_icon("report", 18, "#c084fc"))
+        self.btn_report.setIconSize(QSize(16, 16))
+        self.btn_report.setFixedSize(26, 24)
+        self.btn_report.setToolTip("Abrir relatório completo da missão (.md)")
+        self.btn_report.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_report.setStyleSheet("""
+            QPushButton {
+                background: rgba(168, 85, 247, 0.25);
+                border: 1px solid rgba(192, 132, 252, 0.6);
+                border-radius: 6px;
+            }
+            QPushButton:hover {
+                background: rgba(168, 85, 247, 0.55);
+                border-color: #d8b4fe;
+            }
+        """)
+        self.btn_report.clicked.connect(self.open_current_report)
+        self.btn_report.hide()
+        header_layout.addWidget(self.btn_report)
 
         self.btn_copy = QPushButton()
         self.btn_copy.setIcon(create_vector_icon("copy", 18, "#d8b4fe"))
@@ -75,7 +104,8 @@ class SpeechBalloon(QWidget):
 
         # Área de texto
         self.text_browser = QTextBrowser()
-        self.text_browser.setOpenExternalLinks(True)
+        self.text_browser.setOpenExternalLinks(False)
+        self.text_browser.anchorClicked.connect(self.on_link_clicked)
         self.text_browser.setStyleSheet("""
             QTextBrowser {
                 background: transparent;
@@ -100,12 +130,51 @@ class SpeechBalloon(QWidget):
 
         self.setFixedSize(340, 210)
 
-    def set_text(self, text: str):
+    def set_text(self, text: str, report_path: str = None):
         """Define e formata o conteúdo textual exibido no balão."""
+        self.current_report_path = str(report_path) if report_path else None
+        if self.current_report_path and Path(self.current_report_path).exists():
+            self.btn_report.show()
+        else:
+            self.btn_report.hide()
+
         formatted = text.replace("\n", "<br>")
         self.text_browser.setHtml(
             f"<div style='color:#f3f4f6; font-family: Segoe UI, sans-serif;'>{formatted}</div>"
         )
+
+    def on_link_clicked(self, url: QUrl):
+        """Trata cliques em links, abrindo arquivos locais no aplicativo padrão do SO."""
+        if url.isLocalFile():
+            local_path = url.toLocalFile()
+            self._open_file(local_path)
+        elif url.scheme() == "file":
+            local_path = url.path()
+            if sys.platform == "win32" and local_path.startswith("/"):
+                local_path = local_path.lstrip("/")
+            self._open_file(local_path)
+        else:
+            QDesktopServices.openUrl(url)
+
+    def open_current_report(self):
+        """Abre o arquivo de relatório atual no editor padrão."""
+        if self.current_report_path:
+            self._open_file(self.current_report_path)
+
+    def _open_file(self, file_path: str):
+        """Abre um arquivo local com o programa padrão do sistema operacional."""
+        path_obj = Path(file_path)
+        if not path_obj.exists():
+            return
+        try:
+            if sys.platform == "win32":
+                os.startfile(str(path_obj))
+            elif sys.platform == "darwin":
+                subprocess.Popen(["open", str(path_obj)])
+            else:
+                subprocess.Popen(["xdg-open", str(path_obj)])
+        except Exception as exc:
+            print(f"[SpeechBalloon] Falha ao abrir arquivo {file_path}: {exc}")
 
     def copy_content(self):
         """Copia o conteúdo do balão para a área de transferência do sistema operacional."""

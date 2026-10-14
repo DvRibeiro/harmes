@@ -58,5 +58,11 @@ def create_vector_icon(icon_type: str, size: int = 24, color: str = "#9ca3af") -
         painter.drawLine(int(w * 0.22), int(h * 0.55), int(w * 0.22), int(h * 0.22))
         painter.drawLine(int(w * 0.22), int(h * 0.22), int(w * 0.55), int(h * 0.22))
 
+    elif icon_type == "report":
+        painter.drawRoundedRect(QRectF(w * 0.26, h * 0.18, w * 0.48, h * 0.64), 2, 2)
+        painter.drawLine(int(w * 0.36), int(h * 0.36), int(w * 0.64), int(h * 0.36))
+        painter.drawLine(int(w * 0.36), int(h * 0.50), int(w * 0.64), int(h * 0.50))
+        painter.drawLine(int(w * 0.36), int(h * 0.64), int(w * 0.54), int(h * 0.64))
+
     painter.end()
     return QIcon(pixmap)

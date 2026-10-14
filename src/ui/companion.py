@@ -344,7 +344,8 @@ class CreatureCompanion(QWidget):
                 self.chat_container.show()
                 self.update()
 
-                self.balloon.set_text(self.pending_result)
+                report_file = getattr(self.orchestrator, "last_report_path", None)
+                self.balloon.set_text(self.pending_result, report_path=report_file)
                 self.balloon.show()
                 self.balloon.raise_()
 

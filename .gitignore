@@ -226,3 +226,5 @@ config.json
 !config.example.json
 venv/
 .venv/
+reports/
+logs/

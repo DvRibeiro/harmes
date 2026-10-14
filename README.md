@@ -29,24 +29,28 @@ harmes/
 │   │
 │   ├── core/                   # Núcleo de orquestração
 │   │   ├── __init__.py
-│   │   └── orchestrator.py     # Roteador central de solicitações e provedores
+│   │   ├── orchestrator.py     # Roteador central de solicitações, delegação e agentes
+│   │   ├── task_logger.py      # Gerenciador e auditor de relatórios de missões (.md)
+│   │   └── tools.py            # Ferramentas locais de diagnóstico de rede e homelab
 │   │
 │   ├── providers/              # Provedores de IA plugáveis
 │   │   ├── __init__.py
 │   │   ├── base.py             # Interface abstrata BaseProvider
+│   │   ├── antigravity_provider.py # Conector com o Google AntiGravity via Python SDK
 │   │   ├── gemini.py           # Cliente REST de alta performance para o Gemini
 │   │   └── local_fallback.py   # Respostas locais, utilitários e matemática segura
 │   │
 │   └── ui/                     # Componentes visuais do PyQt6
 │       ├── __init__.py
 │       ├── companion.py        # Widget principal transparente e máquina de estados
-│       ├── balloon.py          # Balão de fala dark/neon roxo com suporte a cópia
+│       ├── balloon.py          # Balão de fala dark/neon roxo com suporte a relatórios e links
 │       ├── settings_dialog.py  # Modal para ajuste de chaves e provedores
 │       └── icons.py            # Gerador dinâmico de ícones vetoriais via QPainter
 │
 ├── tests/                      # Bateria de testes unitários
 │   ├── __init__.py
-│   └── test_gemini_client.py   # Testes do cliente Gemini (paginação, erros e segurança)
+│   ├── test_gemini_client.py   # Testes do cliente Gemini (paginação, erros e segurança)
+│   └── test_orchestrator.py    # Testes do orquestrador, delegação e gerador de relatórios
 │
 ├── tools/                      # Ferramentas auxiliares e offline
 │   └── sprite_tools/           # Scripts de extração e tratamento alfa dos sprites
@@ -56,6 +60,7 @@ harmes/
 │       ├── process_sprites.py
 │       └── slice_alpha.py
 │
+├── reports/                    # Relatórios e auditorias das missões do AntiGravity (ignorado no git)
 ├── config.example.json         # Modelo de configuração seguro (sem credenciais)
 ├── config.json                 # Configurações locais ativas (ignorado no git)
 ├── iniciar.bat                 # Inicializador rápido para Windows
@@ -81,9 +86,15 @@ harmes/
    - Botão para **copiar** a resposta com 1 clique.
 4. **Bandeja do Sistema (*System Tray*)**:
    - Permite minimizar o assistente para a bandeja ao lado do relógio do Windows, restaurando ou abrindo configurações pelo menu de contexto.
-5. **Orquestrador Desacoplado**:
+5. **Orquestrador Central Multi-Agente**:
    - Suporte nativo ao **Google Gemini** com descoberta dinâmica de modelos (`auto`), priorizando versões Flash estáveis e tratando atualizações/remoções de modelos (HTTP 404).
    - Modo **Local Fallback**: se nenhuma chave for inserida ou em falhas de rede, responde a utilitários locais, relógio, data e cálculos matemáticos com parser AST seguro.
+6. **Integração com Google AntiGravity via Python SDK**:
+   - O HARMES atua como maestro: ao receber pedidos técnicos (ex: *"Hermes, peça para o AntiGravity verificar o servidor de minecraft"*), delega autonomamente a tarefa para o agente **AntiGravity** com contexto e workspace direcionados.
+   - Diagnósticos preliminares de rede e infraestrutura do Homelab (`tools.py`) via socket TCP e latência.
+7. **Sistema de Auditoria & Relatórios Completos (`Task Reports`)**:
+   - Para não sobrecarregar o balão com códigos e saídas extensas de terminal, o HARMES apresenta uma síntese executiva de 2 frases e salva a íntegra da análise em `reports/tasks/*.md`.
+   - Botão de relatório e links clicáveis diretamente no balão abrem o arquivo `.md` no editor do sistema (ex: VS Code) em 1 clique.
 
 ---
 
