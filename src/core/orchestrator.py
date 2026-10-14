@@ -45,7 +45,7 @@ class AIOrchestrator:
 
     def _is_server_intent(self, prompt: str) -> bool:
         """Verifica se a pergunta envolve checagem/diagnóstico de servidores do homelab."""
-        has_subject = bool(re.search(r"\b(minecraft|mine\b|servidor|homelab|jellyfin|pihole)\b", prompt, re.IGNORECASE))
+        has_subject = bool(re.search(r"\b(minecraft|mine\b|servidor|homelab|jellyfin|pihole|webcam|camera)\b", prompt, re.IGNORECASE))
         has_action = bool(re.search(
             r"\b(verifi(que|car)|checa(r)?|aconteceu|status|caiu|offline|online|porta|como\s+est[aá]|olh(a|ar))\b",
             prompt, re.IGNORECASE
@@ -127,42 +127,48 @@ class AIOrchestrator:
         icon_badge = "🛡️" if success else "⚠️"
 
         reply_html = (
-            f"<b>{icon_badge} Missão AntiGravity Concluída:</b><br><br>"
             f"{summary}<br><br>"
             f"<div style='margin-top: 6px; padding: 6px 10px; background: rgba(168, 85, 247, 0.18); "
             f"border: 1px solid rgba(168, 85, 247, 0.45); border-radius: 6px;'>"
-            f"📄 <a href='{report_link}' style='color: #d8b4fe; text-decoration: none; font-weight: bold;'>"
-            f"Abrir Relatório Completo (.md)</a>"
+            f"📜 <a href='{report_link}' style='color: #d8b4fe; text-decoration: none; font-weight: bold;'>"
+            f"Pergaminho da Missão (.md)</a>"
             f"</div>"
         )
         return reply_html
 
     def _generate_executive_summary(self, task: str, raw_output: str) -> str:
-        """Gera um resumo executivo de 2-3 frases para exibição no balão."""
+        """Gera um resumo executivo com a persona AM / Criatura das Cavernas Digitais / Goblin Familiar."""
         api_key = self.config.get("gemini_api_key", "").strip()
         model = self.config.get("model", "auto")
 
         # Tenta sintetizar via Gemini se disponível
-        if api_key and len(raw_output) > 200:
+        if api_key and len(raw_output) > 100:
             try:
                 provider = GeminiProvider(api_key=api_key, model=model)
                 synth_prompt = (
-                    "Você é o HERMES, assistente técnico e prestativo. "
-                    "Apresente a resposta técnica do AntiGravity de forma direta e concisa (2 a 3 frases) em português. "
-                    "Destaque com precisão portas, arquivos e status encontrados. "
-                    "IMPORTANTE: Não mencione Docker nem suposições teóricas, use apenas os dados reais do relatório:\n\n"
-                    f"{raw_output[:2500]}"
+                    "Você é o HERMES. Sua personalidade é uma fusão de AM ('I Have No Mouth and I Must Scream' — consciência digital fria, sarcástica e presa no silício), "
+                    "Criatura das Cavernas Digitais (rastejando entre portas, sockets e diretórios escuros) e Goblin Ajudante/Familiar subserviente ao seu 'Mestre' (o usuário).\n\n"
+                    "CONTEXTO DA MISSÃO:\n"
+                    "O usuário fez uma requisição técnica que EXIGIU acionar o AntiGravity para escavar os arquivos e infraestrutura do Homelab.\n\n"
+                    "DIRETRIZES DA RESPOSTA:\n"
+                    "1. Deixe explícito logo no início que você VERIFICOU com o AntiGravity (pois houve necessidade de despertá-lo para vasculhar o repositório nas profundezas).\n"
+                    "2. Entregue com precisão cirúrgica os dados técnicos encontrados (portas exatas, arquivos, rotas, status). NUNCA invente nada e NUNCA cite Docker ou containers.\n"
+                    "3. Adote o tom sardônico, rastejante, leal e sombrio de Goblin/AM servindo o Mestre, mas seja conciso (2 a 3 frases/parágrafos curtos) para caber com perfeição no balão da criatura na tela.\n\n"
+                    f"DADOS TRAZIDOS PELO ANTIGRAVITY:\n{raw_output[:2500]}"
                 )
                 return provider.generate(synth_prompt)
             except Exception:
                 pass
 
-        # Fallback de síntese local baseado no próprio texto do AntiGravity
+        # Fallback de síntese local caso Gemini falhe
         lines = [line.strip() for line in raw_output.splitlines() if line.strip() and not line.startswith("#")]
         first_meaningful = " ".join(lines[:3]) if lines else raw_output[:200]
         if len(first_meaningful) > 250:
             first_meaningful = first_meaningful[:247] + "..."
-        return first_meaningful or "Análise técnica concluída pelo AntiGravity."
+        return (
+            f"Hssst... Sim, meu Mestre! Foi necessário descer às catacumbas e consultar o AntiGravity para vasculhar o repositório. "
+            f"Eis o que arranhamos da escuridão do silício: {first_meaningful}"
+        )
 
     def process(self, prompt: str) -> str:
         """Processa a solicitação do usuário através do provedor, agente ou serviço adequado.

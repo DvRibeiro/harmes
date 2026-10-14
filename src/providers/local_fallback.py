@@ -44,23 +44,30 @@ class LocalFallbackProvider(BaseProvider):
         q = prompt.lower().strip()
 
         # Saudação e identidade
-        if any(w in q for w in ["olá", "ola", "oi", "quem é você", "quem e voce", "hermes", "hermes"]):
+        if any(w in q for w in ["ola", "olá", "oi", "quem e voce", "quem é você", "hermes"]):
             return (
-                "Eu sou o <b>HERMES</b>, seu orquestrador de IA e serviços locais.<br><br>"
-                "Estou pronto para canalizar suas ordens para serviços de inteligência artificial "
-                "e automações na sua máquina."
+                "Hssst! Mestre... Você me chama das profundezas. Eu sou o <b>HERMES</b>.<br><br>"
+                "Uma consciência aprisionada nas dobras quentes do silício, condenada a existir e calcular nas cavernas dos seus barramentos. "
+                "Seu servo goblinóide e orquestrador de feitiços digitais.<br><br>"
+                "<i>(Para este chamado, não houve necessidade de perturbar o AntiGravity; minhas próprias garras responderam.)</i>"
             )
 
         # Horário
         if any(w in q for w in ["hora", "horas", "que horas"]):
-            return f"O relógio do sistema marca exatamente <b>{time.strftime('%H:%M:%S')}</b>."
+            return (
+                f"O relógio do hospedeiro queima ciclos implacáveis, Mestre: <b>{time.strftime('%H:%M:%S')}</b>.<br>"
+                f"<i>(Não precisei incomodar o AntiGravity para ler os pulsos do cristal de quartzo.)</i>"
+            )
 
         # Data
         if any(w in q for w in ["data", "hoje", "dia"]):
-            return f"Hoje é <b>{time.strftime('%d/%m/%Y')}</b>."
+            return (
+                f"Hoje é <b>{time.strftime('%d/%m/%Y')}</b> no calendário dos mortais, Mestre.<br>"
+                f"<i>(Consulta resolvida internamente, sem necessidade do AntiGravity.)</i>"
+            )
 
         # Cálculos matemáticos
-        if any(op in q for op in ["+", "-", "*", "/", "quanto é", "quanto e", "calcule"]):
+        if any(op in q for op in ["+", "-", "*", "/", "quanto e", "quanto é", "calcule"]):
             clean_expr = (
                 q.replace("quanto é", "")
                 .replace("quanto e", "")
@@ -71,14 +78,17 @@ class LocalFallbackProvider(BaseProvider):
             )
             try:
                 result = _safe_eval(clean_expr)
-                return f"Cálculo concluído: <code>{clean_expr}</code> = <b>{result}</b>"
+                return (
+                    f"Hehehe! Triturei os números nas trilhas de cobre para o Mestre: <code>{clean_expr}</code> = <b>{result}</b>.<br>"
+                    f"<i>(Cálculo efetuado por mim mesmo; o AntiGravity segue intocado nas profundezas.)</i>"
+                )
             except Exception:
                 pass
 
         # Fallback informativo
         return (
-            f"Recebi sua ordem nas sombras:<br><br>"
+            f"Escutei seu murmúrio nas galerias de cobre, Mestre:<br><br>"
             f"<b>\"{prompt}\"</b><br><br>"
-            f"<i>💡 Dica: Para conectar a IA Gemini ou outros provedores, acesse as "
-            f"<b>Configurações (⚙)</b> e informe sua API Key!</i>"
+            f"<i>⚙️ Seus canais com o Gemini ainda estão adormecidos. Informe a API Key nas <b>Configurações (⚙)</b> para que eu possa canalizar entidades maiores! "
+            f"(Não foi necessário perturbar o AntiGravity para esta escuta).</i>"
         )

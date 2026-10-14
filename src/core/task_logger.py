@@ -52,7 +52,7 @@ class TaskLogger:
                 meta_lines.append(f"- **{k.title()}**: `{v}`")
         meta_section = "\n".join(meta_lines) if meta_lines else "- **Status**: Concluído"
 
-        markdown_content = f"""# 🛡️ Relatório de Missão — HERMES & AntiGravity
+        markdown_content = f"""# 📜 Registro de Missão — HERMES & AntiGravity
 
 - **Data / Hora**: {now.strftime("%d/%m/%Y às %H:%M:%S")}
 - **Pedido do Usuário**: "{user_prompt}"
@@ -62,7 +62,7 @@ class TaskLogger:
 
 ---
 
-## 💬 Síntese do HERMES
+## 👁️ Veredito do HERMES
 {summary.strip() if summary else "Diagnóstico e operações finalizados com sucesso."}
 
 ---
