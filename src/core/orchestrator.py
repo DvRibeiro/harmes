@@ -25,12 +25,14 @@ class AIOrchestrator:
         self.last_report_path: Optional[Path] = None
 
         api_key = self.config.get("gemini_api_key", "").strip()
-        self.antigravity = AntiGravityProvider(api_key=api_key)
+        model = self.config.get("model", "gemini-3.5-flash-lite")
+        self.antigravity = AntiGravityProvider(api_key=api_key, model=model)
 
     def update_config(self, new_config: Dict[str, Any]):
         """Atualiza a configuração ativa do orquestrador."""
         self.config = new_config
         self.antigravity.api_key = new_config.get("gemini_api_key", "").strip()
+        self.antigravity.model = new_config.get("model", "gemini-3.5-flash-lite")
 
     def _is_antigravity_intent(self, prompt: str) -> bool:
         """Verifica se o usuário solicitou explicitamente a ação do AntiGravity."""

@@ -18,7 +18,8 @@ class AntiGravityError(Exception):
 class AntiGravityProvider:
     """Encapsula a orquestração e execução de tarefas através do AntiGravity Python SDK."""
 
-    def __init__(self, api_key: str = "", default_workspace: Optional[str] = None):
+    def __init__(self, api_key: str = "", default_workspace: Optional[str] = None, model: str = "gemini-3.5-flash-lite"):
+        self.model = model or "gemini-3.5-flash-lite"
         self.api_key = api_key
         # Se z:\homelab existir, adota como workspace padrão de infraestrutura
         homelab_path = Path("z:/homelab")
@@ -41,6 +42,7 @@ class AntiGravityProvider:
 
         config = LocalAgentConfig(
             api_key=self.api_key.strip() or None,
+            model=self.model,
             workspaces=workspaces,
             system_instructions=(
                 "Você é o AntiGravity, o agente técnico de infraestrutura, código e automação "
